@@ -10,8 +10,9 @@ import {
   HStack,
   IconButton,
   Text,
+  background,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const ImportTaxes = () => {
@@ -44,11 +45,56 @@ const ImportTaxes = () => {
     }
   };
 
+  const handleClick = () => {
+    console.log('Botão clicado!');
+    alert('Botão clicado!');
+  }
+  const [base64, setBase64] = useState('');
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      // Quando o arquivo for lido, o resultado será convertido para base64
+      reader.onload = (e) => {
+        const base64String = e.target.result.split(',')[1]; // Remove o prefixo "data:application/vnd..."
+        setBase64(base64String);
+        console.log('Base64:', base64String);
+        alert('Arquivo convertido para Base64 com sucesso!');
+      };
+
+      // Ler o arquivo como Data URL (Base64)
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Box w="100%" h="100vh" bg="gray.50">
       <Heading as="h1" size="xl" mb={6}>
         Arquivos importados
       </Heading>
+      <div>
+      <h1>Importar Arquivo Excel</h1>
+      <input 
+        type="file"
+        accept=".xlsx, .xls"
+        onChange={handleFileUpload}
+      />
+      {base64 && (
+        <div>
+          <h2>Arquivo convertido para Base64:</h2>
+          <textarea
+            rows="10"
+            cols="50"
+            value={base64}
+            readOnly
+          />
+        </div>
+      )}
+    </div>
+      <button onClick={handleClick} style={{ backgroundColor: 'blue', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px' }}>Importar</button>
       <Table variant="striped" colorScheme="teal">
         <Thead>
           <Tr>
