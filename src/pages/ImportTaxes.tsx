@@ -12,7 +12,7 @@ import {
   Text,
   background,
 } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const ImportTaxes = () => {
