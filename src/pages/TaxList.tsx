@@ -1,6 +1,5 @@
 import {
   Heading,
-  Button,
   Box,
   Table,
   Tbody,
@@ -14,24 +13,22 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { useTaxes } from "../hooks/useTaxes";
 
 const TaxList = () => {
-  const data = [
-    { id: 1, tributo: 'Tributo A', numeroDoc: '12345', importadoEm: '2024-10-01', status: 'Pending' },
-    { id: 2, tributo: 'Tributo B', numeroDoc: '67890', importadoEm: '2024-10-02', status: 'Completed' },
-    { id: 3, tributo: 'Tributo C', numeroDoc: '34567', importadoEm: '2024-10-03', status: 'Pending' },
-    { id: 4, tributo: 'Tributo D', numeroDoc: '89123', importadoEm: '2024-10-04', status: 'Completed' },
-    { id: 5, tributo: 'Tributo E', numeroDoc: '56789', importadoEm: '2024-10-05', status: 'Pending' },
-    { id: 6, tributo: 'Tributo F', numeroDoc: '45678', importadoEm: '2024-10-06', status: 'Completed' },
-  ];
-
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const { loading, taxes } = useTaxes(currentPage);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  if (loading) {
+    return <h1>Loading</h1>
+  }
+
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(taxes.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentData = data.slice(startIndex, endIndex);
+  const currentData = taxes.slice(startIndex, endIndex);
 
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -58,25 +55,16 @@ const TaxList = () => {
             <Th>Nº Doc.</Th>
             <Th>Importado em</Th>
             <Th>Status</Th>
-            <Th>Ações</Th>
           </Tr>
         </Thead>
         <Tbody>
           {currentData.map((item) => (
             <Tr key={item.id}>
               <Td>{item.id}</Td>
-              <Td>{item.tributo}</Td>
-              <Td>{item.numeroDoc}</Td>
-              <Td>{item.importadoEm}</Td>
-              <Td>{item.status}</Td>
-              <Td>
-                <Button colorScheme="blue" size="sm" mr={2}>
-                  Editar
-                </Button>
-                <Button colorScheme="red" size="sm">
-                  Excluir
-                </Button>
-              </Td>
+              <Td>{item.type}</Td>
+              <Td>{item.documentNumber}</Td>
+              <Td>{item.createdAt.toISOString()}</Td>
+              <Td>Qualquer coisa</Td>
             </Tr>
           ))}
         </Tbody>

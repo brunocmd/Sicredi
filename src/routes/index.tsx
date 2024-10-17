@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import TaxList from '../pages/TaxList';
 import ImportTaxes from '../pages/ImportTaxes';
 import MainLayout from '../components/MainLayout';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
@@ -14,17 +15,22 @@ export const router = createBrowserRouter([
         element: <Login />
       },
       {
-        path: '/home',
-        element: <Home />
-      },
-      {
-        path: '/list',
-        element: <TaxList />
-      },
-      {
-        path: '/import',
-        element: <ImportTaxes />
-      }
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '/home',
+            element: <Home />
+          },
+          {
+            path: '/list',
+            element: <TaxList />
+          },
+          {
+            path: '/import',
+            element: <ImportTaxes />
+          }
+        ]
+      }      
     ]
   },
   

@@ -13,12 +13,25 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
-import { APP_NAME, measures } from "../config/constants";
+import {  measures } from "../config/constants";
+import { FormEvent, useState } from "react";
+import { useLogin } from "../hooks/useLogin";
+import { useNavigate } from "react-router-dom";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Login = () => {
+  const { loginUser } = useLogin();
+  const [username, setUsername] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    await loginUser(username, password);
+    navigate('/home');
+  }
   return (
     <Flex
       flexDirection="column"
@@ -29,9 +42,9 @@ const Login = () => {
       alignItems="center"
     >
       <Stack flexDir="column" mb="2" justifyContent="center" alignItems="center">
-        <Heading color="teal.500">{ APP_NAME }</Heading>
+        <Heading color="teal.500">{ import.meta.env.VITE_APP_NAME }</Heading>
         <Box minW={{ base: "90%", md: "468px" }}>
-          <form>
+          <form onSubmit={handleLogin}>
             <Stack 
               spacing={measures.stackSpacing} 
               p={measures.stackPadding} 
@@ -41,13 +54,13 @@ const Login = () => {
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<CFaUserAlt  />} />
-                  <Input type="email" placeholder="Usuário" />
+                  <Input type="text" placeholder="Usuário" onChange={(e) => setUsername(e.target.value)} />
                 </InputGroup>
               </FormControl>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<CFaLock  />} />
-                  <Input type="password" placeholder="Senha" />
+                  <Input type="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} />
                 </InputGroup>
                 <FormHelperText textAlign="right">
                   <Link>Esqueci minha senha</Link>

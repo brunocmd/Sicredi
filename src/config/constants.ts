@@ -5,3 +5,5 @@ export const measures = {
   stackPadding: '1rem',
   stackBoxShadow: 'md'
 };
+
+export const ACCESS_TOKEN_KEY = 'accessToken';
